@@ -31,10 +31,21 @@
 
 <script>
 	var summaryData = {
-		"wordcount" : ko.observable(0),
-		"readingMinutes" : ko.observable(0)
+		wordcount : ko.observable(0),
+		readingMinutes : ko.observable(0)
 	};
 
 	ko.applyBindings(summaryData);
+
+	function update() {
+		$.getJSON("/api/today", function(data) {
+			console.log(data);
+			summaryData.wordcount(data.wordcount);
+		});
+	};
+
+	update();
+
+	var updaterId = setInterval(update, 2 * 60 * 1000);
 </script>
 {% endblock %}
