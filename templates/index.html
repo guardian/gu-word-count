@@ -39,8 +39,13 @@
 
 	function update() {
 		$.getJSON("/api/today", function(data) {
-			console.log(data);
+			//console.log(data);
+			if(summaryData.wordcount != 0 && data.wordcount != summaryData.wordcount) {
+				$('#wordcount').effect("highlight", {}, 2000);
+			}
+			
 			summaryData.wordcount(data.wordcount);
+
 		});
 	};
 
