@@ -4,35 +4,33 @@
 
 {% block content %}
 <div class="fluid-wrap">
-	<div class="fluid-row">
-		<div class="col-12">
-			<h1 class="article-heading">Guardian word count</h1>
+	<div class="fluid-row margin-top">
+		<div id="display" class="display col-12">
 
-			<blockquote>What has the Guardian published and how long would it take to read it?</blockquote>
+			<p>Today, the Guardian has published <span id="wordcount" data-bind="text: wordcount"></span> words.</p>
+			<p>The average reader would take <span id="duration" data-bind="text: duration">_</span> to read the whole website.</p>
+
+
+
 		</div>
 	</div>
-
-	<div class="fluid-row margin-top">
-		<div class="display col-8">
-
-			<p>Today the Guardian has published <span id="wordcount" data-bind="text: wordcount"></span> words.</p>
-		</div>
-		<div class="col-4">
-			<h2 class="sub-heading">Links</h2>
+	<div class="fluid-row">
+			<div class="admin col-12">
+			<h2 class="sub-heading">Admin</h2>
 
 			<ol>
 				<li><a href="/tasks/today/count">Run calculation</a></li>
 			</ol>
-
-
-		</div>
+			</div>
 	</div>
 </div>
+
+
 
 <script>
 	var summaryData = {
 		wordcount : ko.observable(0),
-		readingMinutes : ko.observable(0)
+		duration : ko.observable(0)
 	};
 
 	ko.applyBindings(summaryData);
@@ -43,8 +41,10 @@
 			if(summaryData.wordcount != 0 && data.wordcount != summaryData.wordcount) {
 				$('#wordcount').effect("highlight", {}, 2000);
 			}
-			
+
 			summaryData.wordcount(data.wordcount);
+
+			summaryData.duration(jintervals(data.reading_minutes * 60, "{Greatest}"));
 
 		});
 	};

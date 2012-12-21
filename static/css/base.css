@@ -2,3 +2,29 @@
 body {
 			margin-top: 2em;
 	}
+
+.display {
+	font-size: 4em;
+}
+
+.display p {
+	margin-top: 2em;
+	margin-bottom: 1em;
+	line-height: 1em;
+}
+
+.display p:first-child {
+	font-size: 150%;
+
+}
+
+#wordcount, #duration {
+	font-weight: bold;
+	font-size: 110%;
+}
+
+.admin {
+	font-size: 1em;
+	margin-top: 6em;
+	display: none;
+}
