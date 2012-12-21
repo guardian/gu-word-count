@@ -13,8 +13,9 @@
 	</div>
 
 	<div class="fluid-row margin-top">
-		<div class="col-8">
-			<p id="wordcount"></p>
+		<div class="display col-8">
+
+			<p>Today the Guardian has published <span id="wordcount" data-bind="text: wordcount"></span> words.</p>
 		</div>
 		<div class="col-4">
 			<h2 class="sub-heading">Links</h2>
@@ -28,4 +29,12 @@
 	</div>
 </div>
 
+<script>
+	var summaryData = {
+		"wordcount" : ko.observable(0),
+		"readingMinutes" : ko.observable(0)
+	};
+
+	ko.applyBindings(summaryData);
+</script>
 {% endblock %}
