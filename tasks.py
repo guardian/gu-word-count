@@ -7,8 +7,12 @@ from urllib import quote, urlencode
 from google.appengine.api import urlfetch
 
 import headers
+import tags
 
 from models import WordcountSummary
+
+def read_wordcount(fields):
+	return int(fields["wordcount"])
 
 def read_todays_content(page = 1):
 	url = "http://content.guardianapis.com/search"
@@ -17,6 +21,7 @@ def read_todays_content(page = 1):
 		"page-size" : "50",
 		"format" : "json",
 		"show-fields" : "wordcount",
+		"tags" : "tone",
 		"date-id" : "date/today",}
 
 	final_url = url + "?" + urlencode(payload)
@@ -46,13 +51,26 @@ def read_todays_content(page = 1):
 
 		path = result["id"]
 
+		live_flag = tags.is_live(result)
+
 		lookup = WordcountSummary.query(WordcountSummary.path == path)
 
-		if lookup.count() > 0: continue
+		if lookup.count() > 0:
+
+			record = lookup.iter().next()
+
+			current_wordcount = read_wordcount(fields)
+
+			if not current_wordcount == record.wordcount:
+				record.wordcount = current_wordcount
+				record.put()
+
+			continue
+
 
 		WordcountSummary(path = path,
 			section_id = result["sectionId"],
-			wordcount = int(fields["wordcount"]),
+			wordcount = read_wordcount(fields),
 			iso_published_date = result["webPublicationDate"][:10],).put()
 
 	if not int(total_pages) == page:
@@ -70,21 +88,5 @@ class TodaysCount(webapp2.RequestHandler):
 		headers.json(self.response)
 		self.response.out.write(json.dumps(data))
 
-class Clean(webapp2.RequestHandler):
-	def get(self):
-		for record in WordcountSummary.query():
-			lookup = WordcountSummary.query(WordcountSummary.path == record.path)
-
-			if lookup.count() > 1:
-				iterator = lookup.iter()
-				for item in iterator:
-					if iterator.has_next():
-						continue
-					item.key.delete()
-
-		data = {"status" : "ok"}
-		headers.json(self.response)
-		self.response.out.write(json.dumps(data))
-
-app = webapp2.WSGIApplication([('/tasks/today/count', TodaysCount), ('/tasks/clean', Clean)],
+app = webapp2.WSGIApplication([('/tasks/today/count', TodaysCount),],
                               debug=True)
