@@ -1,11 +1,14 @@
 application: gu-word-count
-version: 2
+version: 4
 runtime: python27
 api_version: 1
 threadsafe: true
 
 handlers:
 - url: /tasks/today/count
+  script: tasks.app
+  login: admin
+- url: /tasks/clean
   script: tasks.app
   login: admin
 - url: /static

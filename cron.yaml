@@ -3,3 +3,7 @@ cron:
 - description: Today's round up
   url: /tasks/today/count
   schedule: every 2 minutes
+
+- description: Cleans duplicate entries
+  url: /tasks/clean
+  schedule: every 5 minutes

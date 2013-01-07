@@ -48,7 +48,7 @@ def read_todays_content(page = 1):
 
 		lookup = WordcountSummary.query(WordcountSummary.path == path)
 
-		if lookup.count() > 1: continue
+		if lookup.count() > 0: continue
 
 		WordcountSummary(path = path,
 			section_id = result["sectionId"],
@@ -70,5 +70,21 @@ class TodaysCount(webapp2.RequestHandler):
 		headers.json(self.response)
 		self.response.out.write(json.dumps(data))
 
-app = webapp2.WSGIApplication([('/tasks/today/count', TodaysCount)],
+class Clean(webapp2.RequestHandler):
+	def get(self):
+		for record in WordcountSummary.query():
+			lookup = WordcountSummary.query(WordcountSummary.path == record.path)
+
+			if lookup.count() > 1:
+				iterator = lookup.iter()
+				for item in iterator:
+					if iterator.has_next():
+						continue
+					item.key.delete()
+
+		data = {"status" : "ok"}
+		headers.json(self.response)
+		self.response.out.write(json.dumps(data))
+
+app = webapp2.WSGIApplication([('/tasks/today/count', TodaysCount), ('/tasks/clean', Clean)],
                               debug=True)
