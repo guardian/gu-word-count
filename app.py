@@ -9,6 +9,7 @@ from urllib import quote, urlencode
 from google.appengine.api import urlfetch
 
 import queries
+import formats
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
@@ -46,7 +47,7 @@ class ArchivePage(webapp2.RequestHandler):
 		sorted_section_data = sorted(section_data, reverse = True, key = lambda x : x[1])
 		
 		template_values = {
-			'date' : date,
+			'date' : formats.fancy_date(date),
 			'data' : data,
 			'wordcount' : wordcount,
 			'reading_seconds' : reading_seconds(wordcount),
