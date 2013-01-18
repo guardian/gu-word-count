@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Guardian word count{% endblock %}
+
+{% block content %}
+<div class="fluid-wrap">
+	<div class="fluid-row margin-top">
+		<div id="display" class="display col-12">
+
+
+			<p>On {{date}}, the Guardian published <strong>{{wordcount}}</strong> words.</p>
+			<p>The average reader would take <span class="duration">{{reading_seconds}}</span> to read the whole website.</p>
+
+			{% if sections %}
+			<table>
+				<thead>
+					<tr>
+						<th>Section</th>
+						<th>Words</th>
+						<th>Reading time</th>
+					</tr>
+				</thead>
+				{% for section, count, seconds in sections %}
+				<tr>
+					<td><a href="http://www.guardian.co.uk/{{section}}">{{section}}</a></td>
+					<td>{{count}}</td>
+					<td><span class="duration">{{seconds}}</span></td>
+				</tr>
+				{% endfor %}
+			</table>
+			{% endif %}
+
+		</div>
+	</div>
+</div>
+
+<script>
+	$(function() {
+		$('.duration').each(function (index, e) {
+			var element = $(e);
+			var humanisedTime = jintervals(element.text(), "{days?} {hours?} {minutes}");
+			element.text(humanisedTime);
+		});
+	});
+</script>
+{% endblock %}
