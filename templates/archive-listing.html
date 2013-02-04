@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Guardian word count{% endblock %}
+
+{% block content %}
+<div class="fluid-wrap">
+	<div class="fluid-row margin-top">
+		<div id="display" class="display col-12">
+
+			<h1>Archive</h1>
+
+			{% if days %}
+			<table>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Day</th>
+						<th>Words</th>
+						<th>Reading time</th>
+					</tr>
+				</thead>
+				{% for date, day, wordcount, seconds in days %}
+				<tr>
+					<td><a href="/archive/{{date}}">{{date}}</a></td>
+					<td>{{day}}</td>
+					<td>{{wordcount}}</td>
+					<td><span class="duration">{{seconds}}</span></td>
+				</tr>
+				{% endfor %}
+			</table>
+			{% endif %}
+
+		</div>
+	</div>
+</div>
+
+<script>
+	$(function() {
+		$('.duration').each(function (index, e) {
+			var element = $(e);
+			var humanisedTime = jintervals(element.text(), "{days?} {hours?} {minutes}");
+			element.text(humanisedTime);
+		});
+	});
+</script>
+{% endblock %}

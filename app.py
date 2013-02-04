@@ -4,15 +4,20 @@ import os
 import json
 import logging
 import collections
+import datetime
 
 from urllib import quote, urlencode
 from google.appengine.api import urlfetch
+from google.appengine.api import memcache
 
 import queries
 import formats
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
+
+def reading_seconds(words):
+	return (words / 250) * 60
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
@@ -31,9 +36,6 @@ class ArchivePage(webapp2.RequestHandler):
 
 		logging.info(data)
 
-		def reading_seconds(words):
-			return (words / 250) * 60
-
 		wordcount = reduce(lambda acc, item : acc + item.wordcount, data, 0)
 
 		def section_count(counter, item):
@@ -49,15 +51,44 @@ class ArchivePage(webapp2.RequestHandler):
 		template_values = {
 			'date' : formats.fancy_date(date),
 			'data' : data,
-			'wordcount' : wordcount,
+			'wordcount' : "{:,d}".format(wordcount),
 			'reading_seconds' : reading_seconds(wordcount),
 			'sections' : sorted_section_data
 		}
 
 		self.response.out.write(template.render(template_values))
 
+class ArchiveListingPage(webapp2.RequestHandler):
+	def get(self):
+		def create_day_info(data):
+			date = data[0].iso_published_date
+
+			day = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%A")
+ 			wordcount = reduce(lambda acc, item : acc + item.wordcount, data, 0)
+			seconds = reading_seconds(wordcount)
+			summary = (date, day, wordcount, seconds)
+
+			return summary
+
+		template = jinja_environment.get_template('archive-listing.html')
+		now = datetime.date.today()
+		logging.info(now.isoformat())
+		key = "summary.%s" % now.isoformat()
+
+		summary = memcache.get(key)	
+
+		if not summary:
+			data = map(queries.historic_data, [(now - datetime.timedelta(days=i)).isoformat() for i in range(1, 32)])
+			data = filter(lambda x: len(x) > 0, data)
+			data = map(create_day_info, data)
+			memcache.add(key, json.dumps(data), 8 * 60 * 60)
+			summary = data
+
+		template_values = {'days' : json.loads(summary)}
+		self.response.out.write(template.render(template_values))
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
-	('/archive/(\d\d\d\d-\d\d-\d\d)', ArchivePage)],
+	('/archive/(\d\d\d\d-\d\d-\d\d)', ArchivePage),
+	('/archive', ArchiveListingPage),],
                               debug=True)
