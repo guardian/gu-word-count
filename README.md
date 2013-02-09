@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 gu-word-count
 =============
 
-Generates word counts for articles
-=======
-simply-py
-=========
+Generates word counts for articles and shows how long it would take to read all the content on the website.
 
-A simple blueprint for creating python apps in Google App Engine
->>>>>>> c3555b4701802978147caef716aa30a71a8bfa4a
