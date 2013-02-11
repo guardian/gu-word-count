@@ -60,31 +60,18 @@ class ArchivePage(webapp2.RequestHandler):
 
 class ArchiveListingPage(webapp2.RequestHandler):
 	def get(self):
-		def create_day_info(data):
-			date = data[0].iso_published_date
-
-			day = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%A")
- 			wordcount = reduce(lambda acc, item : acc + item.wordcount, data, 0)
-			seconds = reading_seconds(wordcount)
-			summary = (date, day, wordcount, seconds)
-
-			return summary
 
 		template = jinja_environment.get_template('archive-listing.html')
+		template_values = {}
+
 		now = datetime.date.today()
-		logging.info(now.isoformat())
 		key = "summary.%s" % now.isoformat()
 
-		summary = memcache.get(key)	
+		summary = memcache.get(key)
 
-		if not summary:
-			data = map(queries.historic_data, [(now - datetime.timedelta(days=i)).isoformat() for i in range(1, 32)])
-			data = filter(lambda x: len(x) > 0, data)
-			data = map(create_day_info, data)
-			memcache.add(key, json.dumps(data), 8 * 60 * 60)
-			summary = data
+		if summary:
+			template_values['days'] = json.loads(summary)
 
-		template_values = {'days' : json.loads(summary)}
 		self.response.out.write(template.render(template_values))
 
 

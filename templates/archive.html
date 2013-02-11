@@ -23,7 +23,7 @@
 				{% for section, count, seconds in sections %}
 				<tr>
 					<td><a href="http://www.guardian.co.uk/{{section}}">{{section}}</a></td>
-					<td>{{count}}</td>
+					<td><span class="formatted-number">{{count}}</span></td>
 					<td><span class="duration">{{seconds}}</span></td>
 				</tr>
 				{% endfor %}
@@ -40,6 +40,10 @@
 			var element = $(e);
 			var humanisedTime = jintervals(element.text(), "{days?} {hours?} {minutes}");
 			element.text(humanisedTime);
+		});
+	$('.formatted-number').each(function(i, element) {
+		var initial = $(element).text();
+		$(element).text(juxtapose(initial, 3, ","));
 		});
 	});
 </script>

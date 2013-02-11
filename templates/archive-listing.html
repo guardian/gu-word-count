@@ -23,11 +23,15 @@
 				<tr>
 					<td><a href="/archive/{{date}}">{{date}}</a></td>
 					<td>{{day}}</td>
-					<td>{{wordcount}}</td>
+					<td><span class="formatted-number">{{wordcount}}</span></td>
 					<td><span class="duration">{{seconds}}</span></td>
 				</tr>
 				{% endfor %}
 			</table>
+			{% endif %}
+
+			{% if not days %}
+			<p>No archive information is currently available.</p>
 			{% endif %}
 
 		</div>
@@ -41,6 +45,10 @@
 			var humanisedTime = jintervals(element.text(), "{days?} {hours?} {minutes}");
 			element.text(humanisedTime);
 		});
+		$('.formatted-number').each(function(i, element) {
+			var initial = $(element).text();
+			$(element).text(juxtapose(initial, 3, ","));
+			});
 	});
 </script>
 {% endblock %}

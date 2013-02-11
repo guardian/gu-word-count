@@ -14,15 +14,6 @@
 
 		</div>
 	</div>
-	<div class="fluid-row">
-			<div class="admin col-12">
-			<h2 class="sub-heading">Admin</h2>
-
-			<ol>
-				<li><a href="/tasks/today/count">Run calculation</a></li>
-			</ol>
-			</div>
-	</div>
 </div>
 
 
@@ -42,7 +33,7 @@
 				$('#wordcount').effect("highlight", {}, 2000);
 			}
 
-			summaryData.wordcount(data.wordcount);
+			summaryData.wordcount(juxtapose(data.wordcount.toString(), 3, ","));
 
 			summaryData.duration(jintervals(data.reading_minutes * 60, "{days?} {hours?} {minutes}"));
 

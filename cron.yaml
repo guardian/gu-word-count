@@ -3,3 +3,7 @@ cron:
 - description: Today's round up
   url: /tasks/today/count
   schedule: every 2 minutes
+
+- description: Generate monthly archive
+  url: /tasks/archive
+  schedule: every day 00:00
