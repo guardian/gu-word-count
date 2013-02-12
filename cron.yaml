@@ -6,4 +6,4 @@ cron:
 
 - description: Generate monthly archive
   url: /tasks/archive
-  schedule: every day 00:00
+  schedule: every 1 hours
