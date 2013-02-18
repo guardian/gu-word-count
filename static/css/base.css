@@ -4,7 +4,7 @@ body {
 	}
 
 .display {
-	font-size: 4em;
+	font-size: 2.5rem;
 }
 
 .display p {
@@ -14,7 +14,7 @@ body {
 }
 
 .display p:first-child {
-	font-size: 150%;
+	font-size: 175%;
 
 }
 
@@ -22,4 +22,33 @@ body {
 	font-weight: bold;
 	font-size: 110%;
 	white-space: nowrap;
+}
+
+.literature {
+	font-size: 2rem;
+}
+
+.navigation-overlay {
+	font-size: 1.5rem;
+	font-family: Georgia, serif;
+	position: fixed;
+	bottom: 2rem;
+	padding: 1rem;
+	border: double 3px darkgrey;
+	width: 55rem;
+}
+
+.initially-hidden {
+	display: none;
+}
+
+.menu-button {
+	position: fixed;
+	display: block;
+	right: 2rem;
+	bottom: 2rem;
+	height: 3rem;
+	width: 3rem;
+	font-size: 2rem;
+	padding: 0.1rem;	
 }

@@ -11,6 +11,7 @@ from google.appengine.api import urlfetch
 import headers
 
 from models import WordcountSummary
+from literature import literature
 
 def today():
 	today = datetime.date.today()
@@ -38,6 +39,9 @@ class Today(webapp2.RequestHandler):
 		data.update(generate_totals(date))
 
 		data.update(reading_time(data))
+
+		if 'wordcount' in data:
+			data['literature'] = literature(data['wordcount'])
 
 		headers.json(self.response)
 		self.response.out.write(json.dumps(data))

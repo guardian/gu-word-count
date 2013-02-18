@@ -13,6 +13,8 @@ from google.appengine.api import memcache
 import queries
 import formats
 
+from literature import literature
+
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
 
@@ -53,7 +55,8 @@ class ArchivePage(webapp2.RequestHandler):
 			'data' : data,
 			'wordcount' : "{:,d}".format(wordcount),
 			'reading_seconds' : reading_seconds(wordcount),
-			'sections' : sorted_section_data
+			'sections' : sorted_section_data,
+			'literature' : literature(wordcount)
 		}
 
 		self.response.out.write(template.render(template_values))

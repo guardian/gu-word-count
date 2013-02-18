@@ -10,8 +10,12 @@
 			<p>Today, the Guardian has published <span id="wordcount" data-bind="text: wordcount"></span> words.</p>
 			<p>The average reader would take <span id="duration" data-bind="text: duration">_</span> to read today's content.</p>
 
+			<p class="literature">That is the equivalent of reading <span data-bind="text: literature">nothing</span>.</p>
 
 
+			<nav class="navigation-overlay initially-hidden"><a href="/archive">Archive</a></nav>
+
+			<button class="menu-button" title="menu">&#9776;</button>
 		</div>
 	</div>
 </div>
@@ -21,7 +25,8 @@
 <script>
 	var summaryData = {
 		wordcount : ko.observable(0),
-		duration : ko.observable(0)
+		duration : ko.observable(0),
+		literature: ko.observable('nothing')
 	};
 
 	ko.applyBindings(summaryData);
@@ -37,11 +42,16 @@
 
 			summaryData.duration(jintervals(data.reading_minutes * 60, "{days?} {hours?} {minutes}"));
 
+			summaryData.literature(data.literature);
 		});
 	};
 
 	update();
 
 	var updaterId = setInterval(update, 2 * 60 * 1000);
+
+	$(function() {
+		$(".menu-button").toggle(function() {$(".navigation-overlay").fadeIn(); }, function() { $(".navigation-overlay").fadeOut(); });
+	});
 </script>
 {% endblock %}
