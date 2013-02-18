@@ -13,7 +13,7 @@
 			<p class="literature">That is the equivalent of reading <span data-bind="text: literature">nothing</span>.</p>
 
 
-			<nav class="navigation-overlay initially-hidden"><a href="/archive">Archive</a></nav>
+			<nav class="navigation-overlay initially-hidden"><a href="/archive">Archive</a> | <label>Date: <input id="archive-date" type="date"/></label> <button type="submit" class="view-archive-button">View</button></nav>
 
 			<button class="menu-button" title="menu">&#9776;</button>
 		</div>
@@ -55,9 +55,14 @@
 <script type="text/coffeescript">
 
 $ ->
-	console.log "Hello world"
+	$('[type="date"]').datepicker {defaultDate : -1, dateFormat: "yy-mm-dd"}
 
 	$(".menu-button").asEventStream("click").subscribe((event) -> $(".navigation-overlay").toggle("slow"))
+
+	$(".view-archive-button").asEventStream("click").subscribe (event) ->
+		date = $("#archive-date").val()
+		console.log date
+		window.location = "/archive/#{date}"
 
 </script>
 

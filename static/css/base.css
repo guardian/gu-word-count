@@ -29,13 +29,14 @@ body {
 }
 
 .navigation-overlay {
-	font-size: 1.5rem;
+	font-size: 1.25rem;
 	font-family: Georgia, serif;
 	position: fixed;
 	bottom: 2rem;
 	padding: 1rem;
 	border: double 3px darkgrey;
 	width: 55rem;
+	background-color: white;
 }
 
 .initially-hidden {
