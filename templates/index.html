@@ -61,7 +61,6 @@ $ ->
 
 	$(".view-archive-button").asEventStream("click").subscribe (event) ->
 		date = $("#archive-date").val()
-		console.log date
 		window.location = "/archive/#{date}"
 
 </script>

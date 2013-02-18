@@ -33,8 +33,13 @@ class ArchivePage(webapp2.RequestHandler):
 	def get(self, date):
 		logging.info(date)
 		template = jinja_environment.get_template('archive.html')
+		archive_unavailable_template = jinja_environment.get_template('archive-unavailable.html')
 
 		data = queries.historic_data(date)
+
+		if not data:
+			self.response.out.write(archive_unavailable_template.render({"date" : formats.fancy_date(date)}))
+			return
 
 		logging.info(data)
 

@@ -53,3 +53,19 @@ body {
 	font-size: 2rem;
 	padding: 0.1rem;	
 }
+
+.ui-datepicker-prev {
+	float: left;
+}
+
+.ui-datepicker-next {
+	float: right;
+}
+
+.ui-datepicker-month {
+	margin-left: 5rem;
+}
+
+.ui-datepicker-header {
+	background-color: white;
+}
