@@ -50,8 +50,15 @@
 
 	var updaterId = setInterval(update, 2 * 60 * 1000);
 
-	$(function() {
-		$(".menu-button").toggle(function() {$(".navigation-overlay").fadeIn(); }, function() { $(".navigation-overlay").fadeOut(); });
-	});
 </script>
+
+<script type="text/coffeescript">
+
+$ ->
+	console.log "Hello world"
+
+	$(".menu-button").asEventStream("click").subscribe((event) -> $(".navigation-overlay").toggle("slow"))
+
+</script>
+
 {% endblock %}
