@@ -16,3 +16,6 @@ def fancy_date(date):
 	format = "%%d%s %%B %%Y" % suffix
 	return dt.strftime(format)
 
+def url_date(date):
+	dt = datetime.datetime.strptime(date, "%Y-%m-%d")
+	return "{year}/{month}/{day}".format(year = dt.year, month = dt.strftime("%b").lower(), day = dt.strftime("%d"))

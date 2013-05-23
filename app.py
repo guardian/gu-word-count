@@ -57,11 +57,12 @@ class ArchivePage(webapp2.RequestHandler):
 		
 		template_values = {
 			'date' : formats.fancy_date(date),
+			'url_date' : formats.url_date(date),
 			'data' : data,
 			'wordcount' : "{:,d}".format(wordcount),
 			'reading_seconds' : reading_seconds(wordcount),
 			'sections' : sorted_section_data,
-			'literature' : literature(wordcount)
+			'literature' : literature(wordcount),
 		}
 
 		self.response.out.write(template.render(template_values))
