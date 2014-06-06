@@ -23,12 +23,14 @@ def read_wordcount(fields):
 def read_todays_content(page = 1):
 	url = "http://content.guardianapis.com/search"
 
+    today = date.today() - timedelta(days=60)
+
 	payload = {"page" : str(page),
 		"page-size" : "50",
 		"format" : "json",
 		"show-fields" : "wordcount",
 		"tags" : "tone",
-		"date-id" : "date/today",}
+		"from-date" : today.isoformat(),}
 
 	final_url = url + "?" + urlencode(payload)
 	logging.info(final_url)
