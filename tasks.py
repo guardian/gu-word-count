@@ -11,6 +11,7 @@ from google.appengine.api import memcache
 import headers
 import tags
 import queries
+import configuration
 
 from models import WordcountSummary
 
@@ -21,24 +22,28 @@ def read_wordcount(fields):
 	return int(fields["wordcount"])
 
 def read_todays_content(page = 1):
-	url = "http://content.guardianapis.com/search"
+	url = "http://beta.content.guardianapis.com/search"
 
-    today = date.today() - timedelta(days=60)
+	today = datetime.date.today()
 
-	payload = {"page" : str(page),
+	payload = {
+		"page" : str(page),
 		"page-size" : "50",
 		"format" : "json",
 		"show-fields" : "wordcount",
 		"tags" : "tone",
-		"from-date" : today.isoformat(),}
+		"from-date" : today.isoformat(),
+		"api-key" : configuration.lookup('API_KEY'),
+		}
 
 	final_url = url + "?" + urlencode(payload)
-	logging.info(final_url)
+	#logging.info(final_url)
 
 	result = urlfetch.fetch(final_url, deadline = 9)
 
 	if not result.status_code == 200:
 		logging.warning("Failed to read from the Content Api")
+		logging.warning('Status code: %d' % result.status_code)
 		return
 
 	data = json.loads(result.content)
