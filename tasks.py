@@ -22,7 +22,7 @@ def read_wordcount(fields):
 	return int(fields["wordcount"])
 
 def read_todays_content(page = 1):
-	url = "http://beta.content.guardianapis.com/search"
+	url = "http://content.guardianapis.com/search"
 
 	today = datetime.date.today()
 
